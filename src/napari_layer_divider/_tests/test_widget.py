@@ -47,8 +47,12 @@ def test_divide_function_errors():
         divide_image_layers_by_z(data, [10])  # Z=10 is out of range
 
 
-def test_widget_initialization():
+@pytest.mark.qt
+def test_widget_initialization(qapp, qtbot):
     """Test widget can be created."""
+    if qapp is None:
+        pytest.skip("Qt not available")
+
     # Create mock viewer
     viewer = MagicMock()
     viewer.layers = MagicMock()
@@ -59,6 +63,7 @@ def test_widget_initialization():
 
     # Create widget
     widget = LayerDivider(viewer)
+    qtbot.addWidget(widget)
 
     # Basic checks
     assert widget.viewer == viewer
@@ -67,8 +72,12 @@ def test_widget_initialization():
     assert hasattr(widget, "split_button")
 
 
-def test_z_position_parsing():
+@pytest.mark.qt
+def test_z_position_parsing(qapp, qtbot):
     """Test Z position input parsing."""
+    if qapp is None:
+        pytest.skip("Qt not available")
+
     viewer = MagicMock()
     viewer.layers = MagicMock()
     viewer.layers.events = MagicMock()
@@ -77,6 +86,7 @@ def test_z_position_parsing():
     viewer.layers.__iter__ = MagicMock(return_value=iter([]))
 
     widget = LayerDivider(viewer)
+    qtbot.addWidget(widget)
 
     # Test different input formats
     assert widget.parse_z_positions("3, 7, 5") == [3, 5, 7]
@@ -84,8 +94,12 @@ def test_z_position_parsing():
     assert widget.parse_z_positions("5") == [5]
 
 
-def test_widget_with_mock_layer():
+@pytest.mark.qt
+def test_widget_with_mock_layer(qapp, qtbot):
     """Test widget with a mock image layer."""
+    if qapp is None:
+        pytest.skip("Qt not available")
+
     # Create mock layer
     mock_layer = MagicMock()
     mock_layer.name = "test_image"
@@ -106,6 +120,7 @@ def test_widget_with_mock_layer():
 
     # Create widget
     widget = LayerDivider(viewer)
+    qtbot.addWidget(widget)
 
     # Test layer selection
     widget.layer_combo.currentText = MagicMock(return_value="test_image")
