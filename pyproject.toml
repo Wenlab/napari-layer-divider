@@ -119,15 +119,3 @@ exclude = [
 
 target-version = "py39"
 fix = true
-
-[tool.pytest.ini_options]
-minversion = "6.0"
-testpaths = ["src/napari_layer_divider/_tests"]
-filterwarnings = [
-    "ignore::UserWarning",
-    "ignore::DeprecationWarning",
-    "ignore:.*GUI tests.*:UserWarning",
-    "ignore:.*Qt.*:DeprecationWarning",
-]
-qt_api = "pyqt5"
-addopts = "--verbose --tb=short"
