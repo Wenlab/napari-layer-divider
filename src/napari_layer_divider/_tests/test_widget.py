@@ -1,9 +1,13 @@
+import os
 from unittest.mock import MagicMock
 
 import napari
 import numpy as np
 import pytest
 from napari.layers import Image
+
+# Set Qt to use offscreen platform for testing
+os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
 from napari_layer_divider._widget import LayerDivider, divide_image_layers_by_z
 
@@ -150,15 +154,18 @@ class TestLayerDividerWidget:
         # Create mock image layer
         self.mock_layer = MagicMock(spec=Image)
         self.mock_layer.name = "test_image"
-        self.mock_layer.data = np.random.rand(2, 10, 20, 20)
+        self.mock_layer.data = np.random.rand(2, 10, 20, 20).astype(np.float32)
         self.mock_layer.colormap = MagicMock()
         self.mock_layer.colormap.name = "gray"
         self.mock_layer.opacity = 1.0
+        self.mock_layer.visible = True
 
         self.viewer.layers.__iter__ = MagicMock(
             return_value=iter([self.mock_layer])
         )
+        self.viewer.add_image = MagicMock()
 
+    @pytest.mark.filterwarnings("ignore::UserWarning")
     def test_widget_initialization(self):
         """Test widget initialization"""
         widget = LayerDivider(self.viewer)

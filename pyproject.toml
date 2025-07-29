@@ -21,6 +21,7 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Topic :: Scientific/Engineering :: Image Processing",
 ]
 requires-python = ">=3.9"
@@ -44,6 +45,7 @@ testing = [
     "pytest",  # https://docs.pytest.org/en/latest/contents.html
     "pytest-cov",  # https://pytest-cov.readthedocs.io/en/latest/
     "pytest-qt",  # https://pytest-qt.readthedocs.io/en/latest/
+    "pytest-xvfb ; sys_platform == 'linux'",  # for headless testing on linux
     "napari[qt]",  # test with napari's default Qt bindings
 ]
 
@@ -117,3 +119,15 @@ exclude = [
 
 target-version = "py39"
 fix = true
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+testpaths = ["src/napari_layer_divider/_tests"]
+filterwarnings = [
+    "ignore::UserWarning",
+    "ignore::DeprecationWarning",
+    "ignore:.*GUI tests.*:UserWarning",
+    "ignore:.*Qt.*:DeprecationWarning",
+]
+qt_api = "pyqt5"
+addopts = "--verbose --tb=short"
