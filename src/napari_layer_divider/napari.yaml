@@ -1,0 +1,57 @@
+name: napari-layer-divider
+display_name: Layer Divider
+# use 'hidden' to remove plugin from napari hub search results
+visibility: public
+# see https://napari.org/stable/plugins/technical_references/manifest.html#fields for valid categories
+# categories: []
+contributions:
+  commands:
+    - id: napari-layer-divider.get_reader
+      python_name: napari_layer_divider._reader:napari_get_reader
+      title: Open data with Layer Divider
+    - id: napari-layer-divider.write_multiple
+      python_name: napari_layer_divider._writer:write_multiple
+      title: Save multi-layer data with Layer Divider
+    - id: napari-layer-divider.write_single_image
+      python_name: napari_layer_divider._writer:write_single_image
+      title: Save image data with Layer Divider
+    - id: napari-layer-divider.make_sample_data
+      python_name: napari_layer_divider._sample_data:make_sample_data
+      title: Load sample data from Layer Divider
+    - id: napari-layer-divider.make_container_widget
+      python_name: napari_layer_divider:ImageThreshold
+      title: Make threshold Container widget
+    - id: napari-layer-divider.make_magic_widget
+      python_name: napari_layer_divider:threshold_magic_widget
+      title: Make threshold magic widget
+    - id: napari-layer-divider.make_function_widget
+      python_name: napari_layer_divider:threshold_autogenerate_widget
+      title: Make threshold function widget
+    - id: napari-layer-divider.make_qwidget
+      python_name: napari_layer_divider:ExampleQWidget
+      title: Make example QWidget
+  readers:
+    - command: napari-layer-divider.get_reader
+      accepts_directories: false
+      filename_patterns: ['*.npy']
+  writers:
+    - command: napari-layer-divider.write_multiple
+      layer_types: ['image*','labels*']
+      filename_extensions: []
+    - command: napari-layer-divider.write_single_image
+      layer_types: ['image']
+      filename_extensions: ['.npy']
+  sample_data:
+    - command: napari-layer-divider.make_sample_data
+      display_name: Layer Divider
+      key: unique_id.1
+  widgets:
+    - command: napari-layer-divider.make_container_widget
+      display_name: Container Threshold
+    - command: napari-layer-divider.make_magic_widget
+      display_name: Magic Threshold
+    - command: napari-layer-divider.make_function_widget
+      autogenerate: true
+      display_name: Autogenerate Threshold
+    - command: napari-layer-divider.make_qwidget
+      display_name: Example QWidget
