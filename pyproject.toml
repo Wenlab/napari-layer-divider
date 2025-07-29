@@ -23,7 +23,7 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
     "Topic :: Scientific/Engineering :: Image Processing",
 ]
-requires-python = ">=3.10"
+requires-python = ">=3.9"
 # napari can be included in dependencies if napari imports are required.
 # However, you should not include napari[all], napari[qt],
 # or any other Qt bindings directly (e.g. PyQt5, PySide2).
@@ -71,7 +71,7 @@ fallback_version = "0.0.1+nogit"
 
 [tool.black]
 line-length = 79
-target-version = ['py310', 'py311', 'py312', 'py313']
+target-version = ['py39', 'py310', 'py311', 'py312', 'py313']
 
 [tool.ruff]
 line-length = 79
@@ -115,5 +115,5 @@ exclude = [
     "*_vendor*",
 ]
 
-target-version = "py310"
+target-version = "py39"
 fix = true
