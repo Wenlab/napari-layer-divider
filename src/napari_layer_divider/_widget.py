@@ -182,6 +182,16 @@ class LayerDivider(QWidget):
         self.clear_button.clicked.connect(self.clear_inputs)
         button_layout.addWidget(self.clear_button)
 
+        # Add refresh button for fixing blending issues
+        self.refresh_button = QPushButton("Fix Blending")
+        self.refresh_button.clicked.connect(
+            self.fix_layer_blending_after_split
+        )
+        self.refresh_button.setToolTip(
+            "Click if label layers have blending issues after splitting"
+        )
+        button_layout.addWidget(self.refresh_button)
+
         layout.addLayout(button_layout)
 
         # Result information
@@ -342,7 +352,10 @@ class LayerDivider(QWidget):
                 layer.data, z_positions, include_boundaries
             )
 
-            # Add split layers to viewer
+            # Get the original layer's index to maintain proper layer order
+            original_layer_index = list(self.viewer.layers).index(layer)
+
+            # Add split layers to viewer at the same position as original layer
             for i, divided_layer in enumerate(divided_layers):
                 new_layer_name = f"{layer_name}_split_{i+1}"
 
@@ -374,7 +387,16 @@ class LayerDivider(QWidget):
                 if hasattr(layer, "blending"):
                     layer_kwargs["blending"] = layer.blending
 
+                # Add the new layer
                 self.viewer.add_image(divided_layer, **layer_kwargs)
+
+                # Move the new layer to maintain proper order
+                # Insert right after the original layer position
+                target_index = original_layer_index + i + 1
+                if target_index < len(self.viewer.layers):
+                    self.viewer.layers.move(
+                        len(self.viewer.layers) - 1, target_index
+                    )
 
             # Display result
             self.result_label.setText(
@@ -387,8 +409,11 @@ class LayerDivider(QWidget):
                 )
             )
 
-            # Hide original layer
+            # Hide original layer (don't remove it to preserve layer relationships)
             layer.visible = False
+
+            # Fix layer blending issues if necessary
+            self.fix_layer_blending_after_split()
 
         except (ValueError, TypeError, AttributeError) as e:
             QMessageBox.critical(
@@ -396,6 +421,23 @@ class LayerDivider(QWidget):
                 "Split Failed",
                 f"Error occurred during splitting:\n{str(e)}",
             )
+
+    def fix_layer_blending_after_split(self):
+        """
+        Helper method to fix layer blending issues after splitting.
+        Call this if label layers or other layers have blending problems after division.
+        """
+        try:
+            # Refresh the viewer to update layer interactions
+            self.viewer.reset_view()
+
+            # Force a redraw of all layers
+            for layer in self.viewer.layers:
+                if hasattr(layer, "refresh"):
+                    layer.refresh()
+
+        except (ValueError, TypeError, AttributeError) as e:
+            print(f"Error fixing layer blending: {e}")
 
     def clear_inputs(self):
         """Clear inputs"""
