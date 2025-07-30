@@ -345,16 +345,36 @@ class LayerDivider(QWidget):
             # Add split layers to viewer
             for i, divided_layer in enumerate(divided_layers):
                 new_layer_name = f"{layer_name}_split_{i+1}"
-                self.viewer.add_image(
-                    divided_layer,
-                    name=new_layer_name,
-                    colormap=(
-                        layer.colormap.name
-                        if hasattr(layer, "colormap")
-                        else "gray"
-                    ),
-                    opacity=layer.opacity,
-                )
+
+                # Prepare layer properties to preserve
+                layer_kwargs = {
+                    "name": new_layer_name,
+                    "opacity": layer.opacity,
+                }
+
+                # Preserve colormap
+                if hasattr(layer, "colormap"):
+                    layer_kwargs["colormap"] = layer.colormap.name
+                else:
+                    layer_kwargs["colormap"] = "gray"
+
+                # Preserve scale
+                if hasattr(layer, "scale"):
+                    layer_kwargs["scale"] = layer.scale
+
+                # Preserve translate
+                if hasattr(layer, "translate"):
+                    layer_kwargs["translate"] = layer.translate
+
+                # Preserve contrast_limits
+                if hasattr(layer, "contrast_limits"):
+                    layer_kwargs["contrast_limits"] = layer.contrast_limits
+
+                # Preserve blending
+                if hasattr(layer, "blending"):
+                    layer_kwargs["blending"] = layer.blending
+
+                self.viewer.add_image(divided_layer, **layer_kwargs)
 
             # Display result
             self.result_label.setText(
