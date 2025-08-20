@@ -1690,15 +1690,15 @@ packages:
   requires_python: '>=3.9'
 - pypi: ./
   name: napari-layer-divider
-  version: 0.0.4.dev0+g46f2ea9bf.d20250820
-  sha256: 14d2d5447d49c556f72b4c2c7a4f755ba999c0bb7d09fff8fc20c217a671244a
+  version: 0.0.4.dev1+g6e3679812.d20250820
+  sha256: 6e522026a040180f5a1387639da3ff2ac26301fa4fa3ee269b332669443bf31e
   requires_dist:
   - numpy
   - magicgui
   - qtpy
   - scikit-image
-  - napari>=0.6.4,<0.7
-  - pyqt5>=5.15.11,<6
+  - napari>=0.5.3,<0.7
+  - pyqt5>=5.15.0,<6
   - napari[all] ; extra == 'all'
   - tox ; extra == 'testing'
   - pytest ; extra == 'testing'
