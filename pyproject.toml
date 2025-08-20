@@ -33,7 +33,7 @@ dependencies = [
     "numpy",
     "magicgui",
     "qtpy",
-    "scikit-image",
+    "scikit-image", "napari>=0.6.4,<0.7", "pyqt5>=5.15.11,<6",
 ]
 
 [project.optional-dependencies]
@@ -119,3 +119,22 @@ exclude = [
 
 target-version = "py39"
 fix = true
+
+[tool.pixi.workspace]
+channels = ["conda-forge"]
+platforms = ["win-64"]
+
+[tool.pixi.pypi-dependencies]
+napari-layer-divider = { path = ".", editable = true }
+
+[tool.pixi.environments]
+default = { solve-group = "default" }
+all = { features = ["all"], solve-group = "default" }
+testing = { features = ["testing"], solve-group = "default" }
+
+[tool.pixi.tasks]
+
+[tool.pixi.dependencies]
+pre-commit = ">=4.3.0,<5"
+pytest = ">=8.4.1,<9"
+pytest-qt = ">=4.5.0,<5"
